@@ -1,6 +1,6 @@
 "use client";
 
-import { Book, Menu, Sunset, Trees, Zap } from "lucide-react";
+import { Book, Menu, ShoppingCart, Sunset, Trees, Zap } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -115,9 +115,7 @@ const Navbar = ({
           </div>
           <div className="flex items-center gap-2">
             {/* Cart */}
-            <Button variant="outline" size="sm">
-              Cart
-            </Button>
+            <ShoppingCart />
 
             {isLoggedIn ? (
               <NavigationMenu>
@@ -181,7 +179,7 @@ const Navbar = ({
                   </Accordion>
 
                   <div className="flex flex-col gap-3">
-                    <Button variant="outline">Cart</Button>
+                    <ShoppingCart />
 
                     {isLoggedIn ? (
                       <>

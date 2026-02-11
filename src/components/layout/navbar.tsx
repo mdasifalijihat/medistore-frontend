@@ -1,6 +1,6 @@
 "use client";
 
-import { Book, Menu, ShoppingCart, Sunset, Trees, Zap } from "lucide-react";
+import { Loader, Menu, ShoppingCart } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -99,7 +99,7 @@ const Navbar = ({
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
   const isLoggedIn = !!user;
-  const role = (user as any)?.role.toUpperCase();
+  const role = (user as any)?.role?.toUpperCase();
   const status = (user as any)?.status;
   console.log(user);
 
@@ -123,7 +123,9 @@ const Navbar = ({
             {/* Cart */}
             <ShoppingCart />
 
-            {isPending ? null : isLoggedIn && status === "ACTIVE" ? (
+            {isPending ? (
+              <Loader className="h-5 w-5 animate-spin text-muted-foreground" />
+            ) : isLoggedIn && status === "ACTIVE" ? (
               <NavigationMenu>
                 <NavigationMenuList>
                   <NavigationMenuItem>
@@ -234,7 +236,9 @@ const Navbar = ({
                   <div className="flex flex-col gap-3">
                     <ShoppingCart />
 
-                    {isPending ? null : isLoggedIn && status === "ACTIVE" ? (
+                    {isPending ? (
+                      <Loader className="h-5 w-5 animate-spin text-muted-foreground" />
+                    ) : isLoggedIn && status === "ACTIVE" ? (
                       <>
                         {/* CUSTOMER */}
                         {role === "CUSTOMER" && (

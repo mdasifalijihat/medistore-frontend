@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/sheet";
 import Link from "next/link";
 import { ModeToggle } from "./ModeToggle";
+import { authClient } from "@/lib/auth-client";
 
 interface MenuItem {
   title: string;
@@ -95,7 +96,12 @@ const Navbar = ({
   },
   className,
 }: NavbarProps) => {
-  const isLoggedIn = false;
+  const { data: session, isPending } = authClient.useSession();
+  const user = session?.user;
+  const isLoggedIn = !!user;
+  const role = (user as any)?.role.toUpperCase();
+  const status = (user as any)?.status;
+  console.log(user);
 
   return (
     <section className={cn("py-4", className)}>
@@ -117,25 +123,72 @@ const Navbar = ({
             {/* Cart */}
             <ShoppingCart />
 
-            {isLoggedIn ? (
+            {isPending ? null : isLoggedIn && status === "ACTIVE" ? (
               <NavigationMenu>
                 <NavigationMenuList>
                   <NavigationMenuItem>
-                    <NavigationMenuTrigger>Account</NavigationMenuTrigger>
-                    <NavigationMenuContent className="w-48 p-2">
-                      <Link
-                        href="/orders"
-                        className="block rounded-md px-3 py-2 text-sm hover:bg-muted"
+                    <NavigationMenuTrigger>{user?.name}</NavigationMenuTrigger>
+
+                    <NavigationMenuContent className="w-56 p-2 space-y-1">
+                      {/* CUSTOMER */}
+                      {role === "CUSTOMER" && (
+                        <>
+                          <Link
+                            href="/orders"
+                            className="block rounded-md px-3 py-2 text-sm hover:bg-muted"
+                          >
+                            My Orders
+                          </Link>
+
+                          <Link
+                            href="/profile"
+                            className="block rounded-md px-3 py-2 text-sm hover:bg-muted"
+                          >
+                            Profile
+                          </Link>
+                        </>
+                      )}
+
+                      {/* SELLER */}
+                      {role === "SELLER" && (
+                        <>
+                          <Link
+                            href="/seller/dashboard"
+                            className="block rounded-md px-3 py-2 text-sm hover:bg-muted"
+                          >
+                            Seller Dashboard
+                          </Link>
+
+                          <Link
+                            href="/seller/medicines"
+                            className="block rounded-md px-3 py-2 text-sm hover:bg-muted"
+                          >
+                            My Medicines
+                          </Link>
+
+                          <Link
+                            href="/seller/orders"
+                            className="block rounded-md px-3 py-2 text-sm hover:bg-muted"
+                          >
+                            Orders
+                          </Link>
+                        </>
+                      )}
+
+                      {/* ADMIN */}
+                      {role === "ADMIN" && (
+                        <Link
+                          href="/admin"
+                          className="block rounded-md px-3 py-2 text-sm hover:bg-muted"
+                        >
+                          Admin Panel
+                        </Link>
+                      )}
+
+                      <button
+                        onClick={() => authClient.signOut()}
+                        className="w-full text-left rounded-md px-3 py-2 text-sm text-red-500 hover:bg-muted"
                       >
-                        My Orders
-                      </Link>
-                      <Link
-                        href="/profile"
-                        className="block rounded-md px-3 py-2 text-sm hover:bg-muted"
-                      >
-                        Profile
-                      </Link>
-                      <button className="w-full text-left rounded-md px-3 py-2 text-sm text-red-500 hover:bg-muted">
                         Logout
                       </button>
                     </NavigationMenuContent>
@@ -145,10 +198,10 @@ const Navbar = ({
             ) : (
               <>
                 <Button asChild variant="outline" size="sm">
-                  <Link href={auth.login.url}>{auth.login.title}</Link>
+                  <Link href="/login">Login</Link>
                 </Button>
                 <Button asChild size="sm">
-                  <Link href={auth.signup.url}>{auth.signup.title}</Link>
+                  <Link href="/signup">Sign up</Link>
                 </Button>
               </>
             )}
@@ -181,15 +234,58 @@ const Navbar = ({
                   <div className="flex flex-col gap-3">
                     <ShoppingCart />
 
-                    {isLoggedIn ? (
+                    {isPending ? null : isLoggedIn && status === "ACTIVE" ? (
                       <>
-                        <Link href="/orders" className="font-semibold">
-                          My Orders
-                        </Link>
-                        <Link href="/profile" className="font-semibold">
-                          Profile
-                        </Link>
-                        <Button variant="outline" className="text-red-500">
+                        {/* CUSTOMER */}
+                        {role === "CUSTOMER" && (
+                          <>
+                            <Link href="/orders" className="font-semibold">
+                              My Orders
+                            </Link>
+                            <Link href="/profile" className="font-semibold">
+                              Profile
+                            </Link>
+                          </>
+                        )}
+
+                        {/* SELLER */}
+                        {role === "SELLER" && (
+                          <>
+                            <Link
+                              href="/seller/dashboard"
+                              className="font-semibold"
+                            >
+                              Seller Dashboard
+                            </Link>
+                            <Link
+                              href="/seller/medicines"
+                              className="font-semibold"
+                            >
+                              My Medicines
+                            </Link>
+                            <Link
+                              href="/seller/orders"
+                              className="font-semibold"
+                            >
+                              Orders
+                            </Link>
+                          </>
+                        )}
+
+                        {/* ADMIN */}
+                        {role === "ADMIN" && (
+                          <>
+                            <Link href="/admin" className="font-semibold">
+                              Admin Panel
+                            </Link>
+                          </>
+                        )}
+
+                        <Button
+                          variant="outline"
+                          className="text-red-500"
+                          onClick={() => authClient.signOut()}
+                        >
                           Logout
                         </Button>
                       </>

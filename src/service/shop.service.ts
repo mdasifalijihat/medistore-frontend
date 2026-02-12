@@ -1,34 +1,51 @@
 // services/shopService.ts
 import { env } from "@/env";
-import { Medicine, } from "@/shop";
+import { Medicine, Category,  } from "@/shop";
 
 const API_URL = env.API_URL;
 
 export const shopService = {
-  //   Get all medicines (optionally filter by category)
-  // getMedicines: async (): Promise<Medicine[]> => {
-  //   const res = await fetch(`${env.API_URL}/medicine/}`);
-  //   if (!res.ok) throw new Error("Failed to fetch medicines");
-  //   return res.json();
-  // },
+  // get all medicine
+  getMedicines: async (params?: {
+    search?: string;
+    categoryId?: string;
+    minPrice?: number;
+    maxPrice?: number;
+  }): Promise<Medicine[]> => {
+    const query = new URLSearchParams();
 
-  getMedicines: async (): Promise<Medicine[]> => {
-    const url = `${env.API_URL}/medicine/`;
-    try {
-      const res = await fetch(url);
-      if (!res.ok) {
-        const text = await res.text(); // read error body
-        throw new Error(
-          `Failed to fetch medicines: ${res.status} ${res.statusText} - ${text}`,
-        );
-      }
-      const json = await res.json();
-      return json.data;
-    } catch (err) {
-      console.error("Error fetching medicines from", url, err);
-      throw err;
+    if (params?.search) query.append("search", params.search);
+    if (params?.categoryId) query.append("categoryId", params.categoryId);
+    if (params?.minPrice) query.append("minPrice", String(params.minPrice));
+    if (params?.maxPrice) query.append("maxPrice", String(params.maxPrice));
+
+    const url = `${env.API_URL}/medicine?${query.toString()}`;
+
+    const res = await fetch(url);
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch medicines");
     }
+
+    const json = await res.json();
+    return json.data;
   },
 
-  
+  //Get all categories
+  getCategories: async (): Promise<Category[]> => {
+    const res = await fetch(`${API_URL}/category`, {
+      cache: "no-store", // optional: always fresh
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      console.error("Failed to fetch categories:", text);
+      throw new Error("Failed to fetch categories");
+    }
+
+    const json = await res.json();
+    return json.categories; // matches backend response
+  },
+
+
 };

@@ -29,3 +29,4 @@ export interface Medicine {
   category?: Category;
   seller?: User;
 }
+

@@ -5,7 +5,7 @@ import {
   Category,
   CartItem,
   Order,
-
+  OrderItem,
   CreateOrderPayload,
 } from "@/shop";
 
@@ -122,5 +122,17 @@ export const shopService = {
     return data.data;
   },
 
-  
+  //  Update order status (seller/admin)
+  updateOrderStatus: async (
+    orderId: string,
+    status: Order["status"],
+  ): Promise<Order> => {
+    const res = await fetch(`${API_URL}/orders/${orderId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status }),
+    });
+    if (!res.ok) throw new Error("Failed to update order status");
+    return res.json();
+  },
 };

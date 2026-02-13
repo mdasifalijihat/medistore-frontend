@@ -43,7 +43,16 @@ export interface CartItem {
   };
 }
 
-
+export interface Order {
+  id: string;
+  userId: string;
+  status: "PLACED" | "PROCESSING" | "SHIPPED" | "DELIVERED" | "CANCELLED";
+  paymentMethod: "CASH_ON_DELIVERY" | "ONLINE";
+  paymentStatus: "PENDING" | "PAID" | "FAILED";
+  address: string;
+  createdAt: string;
+  orderItems?: OrderItem[];
+}
 
 export interface CreateOrderPayload {
   paymentMethod: "CASH_ON_DELIVERY" | "ONLINE";

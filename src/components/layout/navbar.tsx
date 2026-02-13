@@ -30,8 +30,9 @@ import Link from "next/link";
 import { ModeToggle } from "./ModeToggle";
 import { authClient } from "@/lib/auth-client";
 import { useCartStore } from "@/store/cart.store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { shopService } from "@/service/shop.service";
+import { Category } from "@/shop";
 
 interface MenuItem {
   title: string;
@@ -70,28 +71,6 @@ const Navbar = ({
       title: "Shop",
       url: "/shop",
     },
-    {
-      title: "Categories",
-      url: "#",
-      items: [
-        {
-          title: "Painkiller",
-          url: "/shop?category=Painkiller",
-        },
-        {
-          title: "Vitamins",
-          url: "/shop?category=vitamins",
-        },
-        {
-          title: "Diabetes",
-          url: "/shop?category=vitamins",
-        },
-        {
-          title: "Baby Care",
-          url: "/shop?category=vitamins",
-        },
-      ],
-    },
   ],
   auth = {
     login: { title: "Login", url: "/login" },
@@ -106,6 +85,21 @@ const Navbar = ({
   const status = (user as any)?.status;
   const setCart = useCartStore((state) => state.setCart);
   const totalCount = useCartStore((state) => state.totalCount);
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const data = await shopService.getCategories();
+        setCategories(data);
+      } catch {
+        console.log("Category load failed");
+      }
+    };
+
+    loadCategories();
+  }, []);
+
   useEffect(() => {
     const loadCart = async () => {
       if (!isLoggedIn) return;
@@ -133,6 +127,23 @@ const Navbar = ({
               <NavigationMenu>
                 <NavigationMenuList>
                   {menu.map((item) => renderMenuItem(item))}
+
+                  {/* 🔥 Dynamic Categories */}
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
+                    <NavigationMenuContent className="bg-popover text-popover-foreground">
+                      {categories.map((cat) => (
+                        <NavigationMenuLink asChild key={cat.id}>
+                          <Link
+                            href={`/shop?categoryId=${cat.id}`}
+                            className="block w-60 px-4 py-2 hover:bg-muted rounded-md"
+                          >
+                            {cat.name}
+                          </Link>
+                        </NavigationMenuLink>
+                      ))}
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
                 </NavigationMenuList>
               </NavigationMenu>
             </div>

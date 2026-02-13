@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { shopService } from "@/service/shop.service";
-import { CartItem } from "@/shop";
+import { CartItem, CreateOrderPayload, Order, OrderItem } from "@/shop";
 import { toast } from "sonner";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -63,6 +63,32 @@ export default function CartPage() {
 
   if (loading) return <div className="p-10">Loading...</div>;
 
+  const handleCheckout = async () => {
+    try {
+      if (items.length === 0) return;
+
+      const orderPayload: CreateOrderPayload = {
+        paymentMethod: "CASH_ON_DELIVERY",
+        address: "Dhaka, Bangladesh",
+        orderItems: items.map((item) => ({
+          medicineId: item.medicine.id,
+          price: item.medicine.price,
+          quantity: item.quantity,
+        })),
+      };
+
+      await shopService.createOrder(orderPayload);
+
+      toast.success("Order placed successfully 🎉");
+
+      setItems([]);
+      setTotal(0);
+      clearCart();
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
   return (
     <div className="max-w-5xl mx-auto py-10 px-4">
       <h1 className="text-3xl font-bold mb-8">🛒 My Cart</h1>
@@ -119,7 +145,9 @@ export default function CartPage() {
           <div className="mt-10 border-t pt-6 flex justify-between items-center">
             <h2 className="text-2xl font-bold">Total: ৳ {total}</h2>
 
-            <Button size="lg">Proceed to Checkout</Button>
+            <Button size="lg" onClick={handleCheckout}>
+              Proceed to Checkout
+            </Button>
           </div>
         </>
       )}

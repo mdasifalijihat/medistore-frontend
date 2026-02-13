@@ -1,6 +1,13 @@
 // services/shopService.ts
 import { env } from "@/env";
-import { Medicine, Category, CartItem,  } from "@/shop";
+import {
+  Medicine,
+  Category,
+  CartItem,
+  Order,
+
+  CreateOrderPayload,
+} from "@/shop";
 
 const API_URL = env.NEXT_PUBLIC_API_URL;
 
@@ -92,5 +99,28 @@ export const shopService = {
   },
 
   // Create order
+  createOrder: async (order: CreateOrderPayload): Promise<Order> => {
+    const res = await fetch(`${API_URL}/orders`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(order),
+    });
 
+    if (!res.ok) throw new Error("Failed to create order");
+    return res.json();
+  },
+
+  // Get user orders
+  getOrders: async (): Promise<Order[]> => {
+    const res = await fetch(`${API_URL}/orders`, {
+      credentials: "include",
+    });
+
+    if (!res.ok) throw new Error("Failed to fetch orders");
+    const data = await res.json();
+    return data.data;
+  },
+
+  
 };

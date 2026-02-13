@@ -30,14 +30,6 @@ export interface Medicine {
   seller?: User;
 }
 
-// export interface CartItem {
-//   id: string;
-//   userId: string;
-//   medicineId: string;
-//   quantity: number;
-//   medicine?: Medicine;
-// }
-
 export interface CartItem {
   id: string;
   userId: string;
@@ -53,3 +45,21 @@ export interface CartItem {
 
 
 
+export interface CreateOrderPayload {
+  paymentMethod: "CASH_ON_DELIVERY" | "ONLINE";
+  address: string;
+  orderItems: {
+    medicineId: string;
+    price: number;
+    quantity: number;
+  }[];
+}
+
+export interface OrderItem {
+  id: string;
+  orderId: string;
+  medicineId: string;
+  price: number;
+  quantity: number;
+  medicine?: Medicine;
+}

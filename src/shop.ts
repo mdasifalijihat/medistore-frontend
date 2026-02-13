@@ -24,9 +24,32 @@ export interface Medicine {
   createdAt: string;
   categoryId: string;
   sellerId: string;
-  image?: string; 
+  image?: string;
   rating?: number;
   category?: Category;
   seller?: User;
 }
+
+// export interface CartItem {
+//   id: string;
+//   userId: string;
+//   medicineId: string;
+//   quantity: number;
+//   medicine?: Medicine;
+// }
+
+export interface CartItem {
+  id: string;
+  userId: string;
+  medicineId: string;
+  quantity: number;
+  medicine: {
+    id: string;
+    name: string;
+    price: number;
+    image?: string;
+  };
+}
+
+
 

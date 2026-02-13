@@ -1,25 +1,58 @@
 "use client";
-
 import { Medicine } from "@/shop";
 import { Button } from "../ui/button";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
+import { env } from "@/env";
+import { useCartStore } from "@/store/cart.store";
 
 interface ShopCartProps {
   medicine: Medicine;
 }
+const API_URL = env.NEXT_PUBLIC_API_URL;
 
 export default function ShopCart({ medicine }: ShopCartProps) {
+  const { data: session, isPending } = authClient.useSession();
+  const user = session?.user;
   const router = useRouter();
+  const addItem = useCartStore((state) => state.addItem);
 
-  const handleAddToCart = () => {
-    console.log("Add to cart:", medicine.id);
-    // 👉 এখানে পরে cart API call দিবা
+  const handleAddToCart = async () => {
+    try {
+      if (!user) {
+        router.push("/login");
+        return;
+      }
+
+      const res = await fetch(`${API_URL}/cart/add`, {
+        method: "POST",
+        credentials: "include", // 🔥 VERY IMPORTANT
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          medicineId: medicine.id,
+          quantity: 1,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Something went wrong");
+      }
+      addItem(data);
+      toast.success("Added to cart 🛒");
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
 
   const renderStars = () => {
-    const rating = medicine.rating ?? 4; 
+    const rating = medicine.rating ?? 4;
     return [...Array(5)].map((_, index) => (
       <Star
         key={index}

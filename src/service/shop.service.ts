@@ -1,8 +1,8 @@
 // services/shopService.ts
 import { env } from "@/env";
-import { Medicine, Category,  } from "@/shop";
+import { Medicine, Category, CartItem,  } from "@/shop";
 
-const API_URL = env.API_URL;
+const API_URL = env.NEXT_PUBLIC_API_URL;
 
 export const shopService = {
   // get all medicine
@@ -47,5 +47,50 @@ export const shopService = {
     return json.categories; // matches backend response
   },
 
+  // Fetch cart items for logged-in user
+  getCart: async (): Promise<{
+    cartItems: CartItem[];
+    totalPrice: number;
+  }> => {
+    const res = await fetch(`${API_URL}/cart`, {
+      credentials: "include", // 🔥 VERY IMPORTANT
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch cart");
+    }
+
+    const json = await res.json();
+
+    return json.data; // { cartItems, totalPrice }
+  },
+
+  // Add item to cart
+  addToCart: async (
+    userId: string,
+    medicineId: string,
+    quantity: number,
+  ): Promise<CartItem> => {
+    const res = await fetch(`${API_URL}/cart/add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId, medicineId, quantity }),
+    });
+    if (!res.ok) throw new Error("Failed to add to cart");
+    return res.json();
+  },
+
+  // Remove item from cart
+  removeFromCart: async (medicineId: string): Promise<void> => {
+    const res = await fetch(`${API_URL}/cart/${medicineId}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    if (!res.ok) throw new Error("Failed to remove item");
+  },
+
+  // Create order
 
 };

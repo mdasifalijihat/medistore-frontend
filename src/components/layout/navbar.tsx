@@ -29,6 +29,9 @@ import {
 import Link from "next/link";
 import { ModeToggle } from "./ModeToggle";
 import { authClient } from "@/lib/auth-client";
+import { useCartStore } from "@/store/cart.store";
+import { useEffect } from "react";
+import { shopService } from "@/service/shop.service";
 
 interface MenuItem {
   title: string;
@@ -101,7 +104,22 @@ const Navbar = ({
   const isLoggedIn = !!user;
   const role = (user as any)?.role?.toUpperCase();
   const status = (user as any)?.status;
-  console.log(user);
+  const setCart = useCartStore((state) => state.setCart);
+  const totalCount = useCartStore((state) => state.totalCount);
+  useEffect(() => {
+    const loadCart = async () => {
+      if (!isLoggedIn) return;
+
+      try {
+        const data = await shopService.getCart();
+        setCart(data.cartItems);
+      } catch (err) {
+        console.log("Cart load failed");
+      }
+    };
+
+    loadCart();
+  }, [isLoggedIn]);
 
   return (
     <section className={cn("py-4", className)}>
@@ -121,7 +139,15 @@ const Navbar = ({
           </div>
           <div className="flex items-center gap-2">
             {/* Cart */}
-            <ShoppingCart />
+            <Link href="/cart" className="relative">
+              <ShoppingCart className="cursor-pointer" />
+
+              {totalCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+                  {totalCount}
+                </span>
+              )}
+            </Link>
 
             {isPending ? (
               <Loader className="h-5 w-5 animate-spin text-muted-foreground" />

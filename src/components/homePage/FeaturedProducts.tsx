@@ -6,9 +6,6 @@ import { motion } from "framer-motion";
 import { ShoppingCart } from "lucide-react";
 import { env } from "@/env";
 import { useRouter } from "next/navigation";
-import { useCartStore } from "@/store/cart.store";
-import { authClient } from "@/lib/auth-client";
-import { toast } from "sonner";
 
 interface ShopCartProps {
   medicine: Medicine;
@@ -17,42 +14,8 @@ interface ShopCartProps {
 const API_URL = env.NEXT_PUBLIC_API_URL;
 
 export default function FeaturedProducts({ medicine }: ShopCartProps) {
-  const { data: session, isPending } = authClient.useSession();
-  const user = session?.user;
-
   const router = useRouter();
-  const addItem = useCartStore((state) => state.addItem);
 
-  const handleAddToCart = async () => {
-    try {
-      if (!user) {
-        router.push("/login");
-        return;
-      }
-
-      const res = await fetch(`${API_URL}/cart/add`, {
-        method: "POST",
-        credentials: "include", // 🔥 VERY IMPORTANT
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          medicineId: medicine.id,
-          quantity: 1,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || "Something went wrong");
-      }
-      addItem(data);
-      toast.success("Added to cart 🛒");
-    } catch (error: any) {
-      toast.error(error.message);
-    }
-  };
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}

@@ -1,11 +1,15 @@
-import { Button } from "@/components/ui/button";
-import React from "react";
+import HeroSection from "@/components/homePage/HeroSection";
+import { shopService } from "@/service/shop.service";
 
-export default function Home() {
+export default async function page() {
+  const medicines = await shopService.getMedicines();
+  console.log("home", medicines);
+
   return (
-    <div>
-      Home page
-      <Button variant="outline">Click me </Button>
+    <div className="container mx-auto">
+      <div className="py-2">
+        <HeroSection />
+      </div>
     </div>
   );
 }

@@ -86,6 +86,7 @@ const Navbar = ({
   const setCart = useCartStore((state) => state.setCart);
   const totalCount = useCartStore((state) => state.totalCount);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -115,8 +116,23 @@ const Navbar = ({
     loadCart();
   }, [isLoggedIn]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <section className={cn("py-4", className)}>
+    <section
+      className={cn(
+        "sticky top-0 z-50 backdrop-blur-md transition-all duration-300 py-2",
+        scrolled ? "bg-background/90 shadow-md border-b" : "bg-background/70",
+        className,
+      )}
+    >
       <div className="container mx-auto">
         {/* Desktop Menu */}
         <nav className="hidden items-center justify-between lg:flex">

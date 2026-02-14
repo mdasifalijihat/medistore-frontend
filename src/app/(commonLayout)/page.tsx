@@ -1,5 +1,6 @@
 import FeaturedProducts from "@/components/homePage/FeaturedProducts";
 import HeroSection from "@/components/homePage/HeroSection";
+import TestimonialSection from "@/components/homePage/TestimonialSection";
 import WelcomeMedicine from "@/components/homePage/WelcomeMedicine";
 import { shopService } from "@/service/shop.service";
 
@@ -26,9 +27,13 @@ export default async function page() {
         </div>
       </div>
       {/* welcome medicine  */}
-
       <div className="my-12">
         <WelcomeMedicine />
+      </div>
+
+      {/* welcome medicine  */}
+      <div className="my-12">
+        <TestimonialSection />
       </div>
     </div>
   );

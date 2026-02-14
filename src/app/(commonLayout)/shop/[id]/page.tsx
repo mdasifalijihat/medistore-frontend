@@ -2,8 +2,8 @@ import { shopService } from "@/service/shop.service";
 import { Medicine } from "@/shop";
 import Image from "next/image";
 import { Star } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import DetailsTabs from "@/components/homePage/DetailsTabs";
+import AddToCartSection from "@/components/homePage/AddToCartSection";
 
 export const dynamicParams = false;
 
@@ -69,20 +69,8 @@ export default async function Page({
         <p className="text-sm text-gray-500">
           Category: {medicine.category?.name}
         </p>
-
-        {/* Quantity */}
-        <div className="flex items-center gap-4">
-          <span>Quantity:</span>
-          <input
-            type="number"
-            min="1"
-            defaultValue="1"
-            className="border w-20 p-2 rounded"
-          />
-        </div>
-
         {/* Add to Cart */}
-        <Button className="mt-4">Add To Cart</Button>
+        <AddToCartSection medicineId={medicine.id} />
       </div>
       {/* Description + Review Tabs */}
       <DetailsTabs description={medicine.description} />

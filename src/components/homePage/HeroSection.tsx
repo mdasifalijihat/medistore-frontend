@@ -41,7 +41,7 @@ export default function HeroSection() {
             priority
             className="object-cover rounded-md"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+          <div className="absolute inset-0 from-black/70 via-black/40 to-transparent" />
         </motion.div>
       </AnimatePresence>
 

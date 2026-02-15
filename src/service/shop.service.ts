@@ -289,4 +289,21 @@ export const shopService = {
       throw new Error(err || "Failed to delete category");
     }
   },
+
+  // ADMIN
+  getAdminStats: async (): Promise<{
+    totalUsers: number;
+    totalMedicines: number;
+    totalOrders: number;
+  }> => {
+    const res = await fetch(`${API_URL}/admin/stats`, {
+      credentials: "include",
+      cache: "no-store",
+    });
+
+    if (!res.ok) throw new Error("Failed to fetch admin stats");
+
+    const json = await res.json();
+    return json.data;
+  },
 };

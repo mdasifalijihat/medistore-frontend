@@ -9,6 +9,7 @@ import {
   OrderStatus,
   SellerOrder,
   CreateMedicine,
+  Review,
 } from "@/shop";
 import { AdminOrder, AdminUser } from "@/types";
 
@@ -356,6 +357,42 @@ export const shopService = {
     });
 
     if (!res.ok) throw new Error("Failed to fetch admin orders");
+
+    const json = await res.json();
+    return json.data;
+  },
+
+  // create review
+  createReview: async (
+    medicineId: string,
+    rating: number,
+    comment: string,
+  ): Promise<Review> => {
+    const res = await fetch(`${API_URL}/review`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ medicineId, rating, comment }),
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err || "Failed to create review");
+    }
+
+    const json = await res.json();
+    return json.data;
+  },
+
+  // Get reviews for a medicine
+  getReviewsByMedicine: async (medicineId: string): Promise<Review[]> => {
+    const res = await fetch(`${API_URL}/review/medicine/${medicineId}`, {
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch reviews");
+    }
 
     const json = await res.json();
     return json.data;

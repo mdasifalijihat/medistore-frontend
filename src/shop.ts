@@ -28,6 +28,7 @@ export interface Medicine {
   rating?: number;
   category?: Category;
   seller?: User;
+  reviews?: Review[];
 }
 
 export interface CartItem {
@@ -114,4 +115,17 @@ export interface CreateMedicine {
   description: string;
   image?: string;
   categoryId: string;
+}
+
+export interface Review {
+  id: string;
+  userId: string;
+  medicineId: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  user: {
+    id: string;
+    name: string;
+  };
 }

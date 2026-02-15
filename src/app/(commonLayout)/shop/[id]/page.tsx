@@ -33,7 +33,7 @@ export default async function Page({
   return (
     <div className="container mx-auto px-6 py-12 grid md:grid-cols-2 gap-10">
       {/* LEFT: IMAGE */}
-      <div className="relative h-[400px] w-full">
+      <div className="relative h-100 w-full">
         <Image
           src={medicine?.image || "/placeholder.png"}
           alt={medicine?.name}
@@ -73,7 +73,10 @@ export default async function Page({
         <AddToCartSection medicineId={medicine.id} />
       </div>
       {/* Description + Review Tabs */}
-      <DetailsTabs description={medicine.description} />
+      <DetailsTabs
+        description={medicine.description}
+        medicineId={medicine.id}
+      />
     </div>
   );
 }

@@ -1,29 +1,29 @@
 import { Route } from "@/types";
-import { LayoutDashboard, ShoppingCart, PlusCircle, Pill } from "lucide-react";
+import { LayoutDashboard, ShoppingCart, Pill, PlusCircle } from "lucide-react";
 
 export const sellerRoutes: Route[] = [
   {
-    title: "Seller Panel",
+    title: "Seller Dashboard",
     items: [
       {
-        title: "Dashboard",
+        title: "Overview",
         url: "/dashboard",
         icon: LayoutDashboard,
       },
       {
-        title: "Customer Orders",
+        title: "Orders",
         url: "/dashboard/orders",
         icon: ShoppingCart,
       },
       {
-        title: "Create Medicine",
-        url: "/dashboard/medicine",
-        icon: PlusCircle,
-      },
-      {
-        title: "Manage Medicines",
+        title: "Products",
         url: "/dashboard/get-medicine",
         icon: Pill,
+      },
+      {
+        title: "Add Product",
+        url: "/dashboard/medicine",
+        icon: PlusCircle,
       },
     ],
   },

@@ -7,6 +7,8 @@ import {
   Order,
   OrderItem,
   CreateOrderPayload,
+  OrderStatus,
+  SellerOrder,
 } from "@/shop";
 
 const API_URL = env.NEXT_PUBLIC_API_URL;
@@ -122,17 +124,36 @@ export const shopService = {
     return data.data;
   },
 
-  //  Update order status (seller/admin)
+  // ================= SELLER =================
+
+  getSellerOrders: async (): Promise<SellerOrder[]> => {
+    const res = await fetch(`${API_URL}/seller/orders`, {
+      credentials: "include",
+      cache: "no-store",
+    });
+
+    if (!res.ok) throw new Error("Failed to fetch seller orders");
+
+    const json = await res.json();
+    return json.data;
+  },
+
   updateOrderStatus: async (
     orderId: string,
-    status: Order["status"],
-  ): Promise<Order> => {
-    const res = await fetch(`${API_URL}/orders/${orderId}`, {
+    status: OrderStatus,
+  ): Promise<void> => {
+    const res = await fetch(`${API_URL}/seller/orders/${orderId}/status`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ status }),
     });
-    if (!res.ok) throw new Error("Failed to update order status");
-    return res.json();
+
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err || "Failed to update order status");
+    }
   },
 };

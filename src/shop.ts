@@ -72,3 +72,37 @@ export interface OrderItem {
   quantity: number;
   medicine?: Medicine;
 }
+export type OrderStatus =
+  | "PLACED"
+  | "PROCESSING"
+  | "SHIPPED"
+  | "DELIVERED"
+  | "CANCELLED";
+
+export interface SellerOrder {
+  id: string;
+  userId: string;
+  status: OrderStatus;
+  paymentMethod: "CASH_ON_DELIVERY" | "ONLINE";
+  paymentStatus: "PENDING" | "PAID" | "FAILED";
+  address: string;
+  createdAt: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  orderItems: {
+    id: string;
+    medicineId: string;
+    price: number;
+    quantity: number;
+    medicine: {
+      id: string;
+      name: string;
+      price: number;
+      stock: number;
+      sellerId: string;
+    };
+  }[];
+}

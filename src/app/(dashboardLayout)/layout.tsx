@@ -55,7 +55,7 @@ export default async function DashboardPage({
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
                 <BreadcrumbLink href="#">
-                  Building Your Application
+                  Medi-Store
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />

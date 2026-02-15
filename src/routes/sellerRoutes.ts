@@ -2,11 +2,11 @@ import { Route } from "@/types";
 
 export const sellerRoutes: Route[] = [
   {
-    title: "Seller dashbaord",
+    title: "Seller Dashboard",
     items: [
       {
-        title: "Analytics",
-        url: "/analytics",
+        title: "Customer Orders",
+        url: "/dashboard/orders",
       },
     ],
   },

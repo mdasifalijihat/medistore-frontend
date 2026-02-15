@@ -9,8 +9,12 @@ export const sellerRoutes: Route[] = [
         url: "/dashboard/orders",
       },
       {
-        title: "Medicine Create",
+        title: "Create Medicine",
         url: "/dashboard/medicine",
+      },
+      {
+        title: "Get Medicine",
+        url: "/dashboard/get-medicine",
       },
     ],
   },

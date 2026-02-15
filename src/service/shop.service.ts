@@ -181,4 +181,61 @@ export const shopService = {
       throw new Error(err || "Failed to update order status");
     }
   },
+
+  // get seller medicine
+  getSellerMedicines: async (): Promise<Medicine[]> => {
+    const res = await fetch(`${API_URL}/medicine/seller/my-medicines`, {
+      credentials: "include",
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err || "Failed to fetch seller medicines");
+    }
+
+    const json = await res.json();
+    return json.data;
+  },
+  // delete medicine
+  deleteMedicine: async (medicineId: string) => {
+    const res = await fetch(`${API_URL}/medicine/${medicineId}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err || "Failed to delete medicine");
+    }
+
+    return null;
+  },
+
+  // update medicine
+  updateMedicine: async (
+    medicineId: string,
+    data: Partial<{
+      name: string;
+      price: number;
+      stock: number;
+      description: string;
+      image?: string;
+    }>,
+  ) => {
+    const res = await fetch(`${API_URL}/medicine/${medicineId}`, {
+      method: "PATCH",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err || "Failed to update medicine");
+    }
+
+    const json = await res.json();
+    return json.data;
+  },
 };

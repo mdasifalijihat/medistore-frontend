@@ -106,3 +106,12 @@ export interface SellerOrder {
     };
   }[];
 }
+
+export interface CreateMedicine {
+  name: string;
+  price: number;
+  stock: number;
+  description: string;
+  image?: string;
+  categoryId: string;
+}

@@ -5,10 +5,10 @@ import {
   Category,
   CartItem,
   Order,
-  OrderItem,
   CreateOrderPayload,
   OrderStatus,
   SellerOrder,
+  CreateMedicine,
 } from "@/shop";
 
 const API_URL = env.NEXT_PUBLIC_API_URL;
@@ -28,9 +28,13 @@ export const shopService = {
     if (params?.minPrice) query.append("minPrice", String(params.minPrice));
     if (params?.maxPrice) query.append("maxPrice", String(params.maxPrice));
 
-    const url = `${env.API_URL}/medicine?${query.toString()}`;
+    // const url = `${API_URL}/medicine?${query.toString()}`;
+    const url = `${API_URL}/medicine?${query.toString()}`;
 
-    const res = await fetch(url);
+    // const res = await fetch(url);
+    const res = await fetch(url, {
+      cache: "no-store",
+    });
 
     if (!res.ok) {
       throw new Error("Failed to fetch medicines");
@@ -125,6 +129,27 @@ export const shopService = {
   },
 
   // ================= SELLER =================
+
+  // services/shopService.ts (add inside shopService)
+
+  createMedicine: async (data: CreateMedicine): Promise<Medicine> => {
+    const res = await fetch(`${API_URL}/medicine`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err || "Failed to create medicine");
+    }
+
+    const json = await res.json();
+    return json.data;
+  },
 
   getSellerOrders: async (): Promise<SellerOrder[]> => {
     const res = await fetch(`${API_URL}/seller/orders`, {

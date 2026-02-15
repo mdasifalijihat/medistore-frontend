@@ -10,7 +10,7 @@ import {
   SellerOrder,
   CreateMedicine,
 } from "@/shop";
-import { AdminUser } from "@/types";
+import { AdminOrder, AdminUser } from "@/types";
 
 const API_URL = env.NEXT_PUBLIC_API_URL;
 
@@ -341,5 +341,23 @@ export const shopService = {
       const err = await res.text();
       throw new Error(err || "Failed to update user status");
     }
+  },
+
+  // ================= ADMIN ORDERS =================
+
+  getAdminOrders: async (status?: OrderStatus): Promise<AdminOrder[]> => {
+    const query = new URLSearchParams();
+
+    if (status) query.append("status", status);
+
+    const res = await fetch(`${API_URL}/admin/orders?${query.toString()}`, {
+      credentials: "include",
+      cache: "no-store",
+    });
+
+    if (!res.ok) throw new Error("Failed to fetch admin orders");
+
+    const json = await res.json();
+    return json.data;
   },
 };

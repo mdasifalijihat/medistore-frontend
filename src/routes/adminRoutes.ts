@@ -1,24 +1,40 @@
 import { Route } from "@/types";
+import {
+  LayoutDashboard,
+  ShoppingCart,
+  Users,
+  FolderPlus,
+  Folder,
+} from "lucide-react";
 
 export const adminRoutes: Route[] = [
   {
     title: "Admin Dashboard",
     items: [
       {
-        title: "Dashboard",
+        title: "Overview",
         url: "/admin-dashboard",
+        icon: LayoutDashboard,
       },
       {
-        title: "Create Category",
-        url: "/admin-dashboard/create-category",
+        title: "Orders",
+        url: "/admin-dashboard/order-monitor",
+        icon: ShoppingCart,
       },
       {
-        title: "Get All Category",
-        url: "/admin-dashboard/get-category",
-      },
-      {
-        title: "Get User",
+        title: "Users",
         url: "/admin-dashboard/get-user",
+        icon: Users,
+      },
+      {
+        title: "Add Category",
+        url: "/admin-dashboard/create-category",
+        icon: FolderPlus,
+      },
+      {
+        title: "Categories",
+        url: "/admin-dashboard/get-category",
+        icon: Folder,
       },
     ],
   },

@@ -80,9 +80,11 @@ const Navbar = ({
 }: NavbarProps) => {
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
-  const isLoggedIn = !!user;
-  const role = (user as any)?.role?.toUpperCase();
+  // const isLoggedIn = !!user;
+
+  const role = (user as any)?.role?.toUpperCase() || "";
   const status = (user as any)?.status;
+  const isLoggedIn = !!user && status === "ACTIVE";
   const setCart = useCartStore((state) => state.setCart);
   const totalCount = useCartStore((state) => state.totalCount);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -208,7 +210,7 @@ const Navbar = ({
                       {role === "SELLER" && (
                         <>
                           <Link
-                            href="/seller/dashboard"
+                            href="/dashboard"
                             className="block rounded-md px-3 py-2 text-sm hover:bg-muted"
                           >
                             Seller Dashboard
@@ -233,7 +235,7 @@ const Navbar = ({
                       {/* ADMIN */}
                       {role === "ADMIN" && (
                         <Link
-                          href="/admin"
+                          href="/admin-dashboard"
                           className="block rounded-md px-3 py-2 text-sm hover:bg-muted"
                         >
                           Admin Panel
@@ -308,10 +310,7 @@ const Navbar = ({
                         {/* SELLER */}
                         {role === "SELLER" && (
                           <>
-                            <Link
-                              href="/seller/dashboard"
-                              className="font-semibold"
-                            >
+                            <Link href="/dashboard" className="font-semibold">
                               Seller Dashboard
                             </Link>
                             <Link
@@ -332,7 +331,10 @@ const Navbar = ({
                         {/* ADMIN */}
                         {role === "ADMIN" && (
                           <>
-                            <Link href="/admin" className="font-semibold">
+                            <Link
+                              href="/admin-dashboard"
+                              className="font-semibold"
+                            >
                               Admin Panel
                             </Link>
                           </>

@@ -6,8 +6,6 @@ import { shopService } from "@/service/shop.service";
 
 export default async function page() {
   const medicines = await shopService.getMedicines();
-  console.log("home", medicines);
-
   return (
     <div className="container mx-auto">
       {/* hero seciton  */}

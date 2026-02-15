@@ -10,6 +10,7 @@ import {
   SellerOrder,
   CreateMedicine,
 } from "@/shop";
+import { AdminUser } from "@/types";
 
 const API_URL = env.NEXT_PUBLIC_API_URL;
 
@@ -305,5 +306,40 @@ export const shopService = {
 
     const json = await res.json();
     return json.data;
+  },
+
+  // ================= ADMIN =================
+
+  // Get all users
+  getAdminUsers: async (): Promise<AdminUser[]> => {
+    const res = await fetch(`${API_URL}/admin/users`, {
+      credentials: "include",
+      cache: "no-store",
+    });
+
+    if (!res.ok) throw new Error("Failed to fetch users");
+
+    const json = await res.json();
+    return json.data;
+  },
+
+  // Update user status (Ban / Unban)
+  updateUserStatus: async (
+    userId: string,
+    status: "ACTIVE" | "BANNED",
+  ): Promise<void> => {
+    const res = await fetch(`${API_URL}/admin/users/${userId}`, {
+      method: "PATCH",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status }),
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err || "Failed to update user status");
+    }
   },
 };

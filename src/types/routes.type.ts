@@ -10,3 +10,12 @@ export interface Route {
   title: string;
   items: RouteItem[];
 }
+
+export interface AdminUser {
+  id: string;
+  name: string;
+  email: string;
+  role: "CUSTOMER" | "SELLER" | "ADMIN";
+  status: "ACTIVE" | "BANNED";
+  createdAt: string;
+}

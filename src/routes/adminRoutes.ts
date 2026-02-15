@@ -16,6 +16,10 @@ export const adminRoutes: Route[] = [
         title: "Get All Category",
         url: "/admin-dashboard/get-category",
       },
+      {
+        title: "Get User",
+        url: "/admin-dashboard/get-user",
+      },
     ],
   },
 ];

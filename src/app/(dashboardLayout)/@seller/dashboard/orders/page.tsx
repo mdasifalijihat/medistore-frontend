@@ -48,6 +48,10 @@ export default function SellerOrdersPage() {
 
   if (loading) return <p>Loading...</p>;
 
+  if (!loading && orders.length === 0) {
+    return <p className="text-center text-gray-500">No orders yet 📭</p>;
+  }
+
   return (
     <div className="space-y-6">
       {orders.map((order) => (
@@ -56,8 +60,6 @@ export default function SellerOrdersPage() {
           <p>Customer: {order.user.name}</p>
           <p>Address: {order.address}</p>
           <p>Status: {order.status}</p>
-
-          {/* STATUS CHANGE DROPDOWN */}
 
           <select
             value={order.status}
@@ -73,7 +75,6 @@ export default function SellerOrdersPage() {
             ))}
           </select>
 
-          {/* ORDER ITEMS */}
           <div className="mt-4">
             {order.orderItems.map((item) => (
               <div key={item.id} className="text-sm border-b py-2">

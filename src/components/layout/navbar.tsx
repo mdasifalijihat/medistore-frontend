@@ -215,20 +215,6 @@ const Navbar = ({
                           >
                             Seller Dashboard
                           </Link>
-
-                          <Link
-                            href="/seller/medicines"
-                            className="block rounded-md px-3 py-2 text-sm hover:bg-muted"
-                          >
-                            My Medicines
-                          </Link>
-
-                          <Link
-                            href="/seller/orders"
-                            className="block rounded-md px-3 py-2 text-sm hover:bg-muted"
-                          >
-                            Orders
-                          </Link>
                         </>
                       )}
 
@@ -312,18 +298,6 @@ const Navbar = ({
                           <>
                             <Link href="/dashboard" className="font-semibold">
                               Seller Dashboard
-                            </Link>
-                            <Link
-                              href="/seller/medicines"
-                              className="font-semibold"
-                            >
-                              My Medicines
-                            </Link>
-                            <Link
-                              href="/seller/orders"
-                              className="font-semibold"
-                            >
-                              Orders
                             </Link>
                           </>
                         )}

@@ -238,4 +238,55 @@ export const shopService = {
     const json = await res.json();
     return json.data;
   },
+
+  // ================= CATEGORY =================
+
+  // Create Category
+  createCategory: async (name: string): Promise<Category> => {
+    const res = await fetch(`${API_URL}/category`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name }),
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err || "Failed to create category");
+    }
+
+    const json = await res.json();
+    return json.data;
+  },
+
+  // Update Category
+  updateCategory: async (id: string, name: string): Promise<Category> => {
+    const res = await fetch(`${API_URL}/category/${id}`, {
+      method: "PATCH",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name }),
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err || "Failed to update category");
+    }
+
+    const json = await res.json();
+    return json.data;
+  },
+
+  // Delete Category
+  deleteCategory: async (id: string): Promise<void> => {
+    const res = await fetch(`${API_URL}/category/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err || "Failed to delete category");
+    }
+  },
 };

@@ -23,9 +23,7 @@ export function AppSidebar({
 }: { seller: { role: string } } & React.ComponentProps<typeof Sidebar>) {
   let routes: Route[] = [];
 
-  switch (
-    seller.role 
-  ) {
+  switch (seller.role) {
     case Roles.admin:
       routes = adminRoutes;
       break;
@@ -36,22 +34,34 @@ export function AppSidebar({
       routes = [];
       break;
   }
+
   return (
     <Sidebar {...props}>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
-        {routes.map((item) => (
-          <SidebarGroup key={item.title}>
-            <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
+        {routes.map((group) => (
+          <SidebarGroup key={group.title}>
+            <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
+
             <SidebarGroupContent>
               <SidebarMenu>
-                {item.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <Link href={item.url}>{item.title}</Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+
+                  return (
+                    <SidebarMenuItem key={item.url}>
+                      <SidebarMenuButton asChild>
+                        <Link
+                          href={item.url}
+                          className="flex items-center gap-2"
+                        >
+                          {Icon && <Icon className="h-4 w-4" />}
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>

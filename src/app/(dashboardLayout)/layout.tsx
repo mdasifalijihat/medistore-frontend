@@ -28,9 +28,8 @@ export default async function DashboardPage({
 
   // unified user object
   const user = data?.user;
-  console.log("SESSION DATA:", data);
-
-  console.log("UNIFIED USER:", user);
+  // console.log("SESSION DATA:", data);
+  // console.log("UNIFIED USER:", user);
 
   // DENY ACCESS if not admin or seller
   if (!user || (user.role !== Roles.admin && user.role !== Roles.seller)) {
@@ -54,9 +53,7 @@ export default async function DashboardPage({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">
-                  Medi-Store
-                </BreadcrumbLink>
+                <BreadcrumbLink href="#">Medi-Store</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
